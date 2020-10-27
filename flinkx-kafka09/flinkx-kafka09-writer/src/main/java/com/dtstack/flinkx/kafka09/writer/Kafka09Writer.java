@@ -22,7 +22,7 @@ import com.dtstack.flinkx.config.WriterConfig;
 import com.dtstack.flinkx.writer.DataWriter;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.util.Map;
 
@@ -56,7 +56,7 @@ public class Kafka09Writer extends DataWriter {
     }
 
     @Override
-    public DataStreamSink<?> writeData(DataStream<Row> dataSet) {
+    public DataStreamSink<?> writeData(DataStream<FlinkxRow> dataSet) {
         Kafka09OutputFormat format = new Kafka09OutputFormat();
         format.setTimezone(timezone);
         format.setEncoding(encoding);

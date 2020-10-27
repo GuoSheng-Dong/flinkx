@@ -20,7 +20,7 @@ package com.dtstack.flinkx.writer;
 
 import com.dtstack.flinkx.constants.Metrics;
 import com.dtstack.flinkx.metrics.AccumulatorCollector;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.flink.util.Preconditions;
 
 /**
@@ -36,9 +36,9 @@ public class ErrorLimiter {
     private AccumulatorCollector accumulatorCollector;
     private volatile double errorRatio = 0.0;
     private String errMsg = "";
-    private Row errorData;
+    private FlinkxRow errorData;
 
-    public void setErrorData(Row errorData){
+    public void setErrorData(FlinkxRow errorData){
         this.errorData = errorData;
     }
 

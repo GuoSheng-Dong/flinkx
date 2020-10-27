@@ -26,7 +26,7 @@ import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import org.apache.flink.core.io.InputSplit;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -146,15 +146,15 @@ public class HdfsParquetInputFormat extends HdfsInputFormat {
     }
 
     @Override
-    protected Row nextRecordInternal(Row row) throws IOException {
+    protected FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
         if(metaColumns.size() == 1 && "*".equals(metaColumns.get(0).getName())){
-            row = new Row(fullColNames.size());
+            row = new FlinkxRow(fullColNames.size());
             for (int i = 0; i < fullColNames.size(); i++) {
                 Object val = getData(currentLine,fullColTypes.get(i),i);
                 row.setField(i, val);
             }
         } else {
-            row = new Row(metaColumns.size());
+            row = new FlinkxRow(metaColumns.size());
             for (int i = 0; i < metaColumns.size(); i++) {
                 MetaColumn metaColumn = metaColumns.get(i);
                 Object val = null;

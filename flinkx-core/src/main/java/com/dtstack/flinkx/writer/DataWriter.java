@@ -27,7 +27,7 @@ import org.apache.flink.api.common.io.OutputFormat;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
 import org.apache.flink.streaming.api.functions.sink.DtOutputFormatSinkFunction;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.flink.util.Preconditions;
 
 import java.util.ArrayList;
@@ -149,7 +149,7 @@ public abstract class DataWriter {
         }
     }
 
-    public abstract DataStreamSink<?> writeData(DataStream<Row> dataSet);
+    public abstract DataStreamSink<?> writeData(DataStream<FlinkxRow> dataSet);
 
     protected DataStreamSink<?> createOutput(DataStream<?> dataSet, OutputFormat outputFormat, String sinkName) {
         Preconditions.checkNotNull(dataSet);

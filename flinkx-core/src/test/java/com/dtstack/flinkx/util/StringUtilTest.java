@@ -19,7 +19,7 @@
 
 package com.dtstack.flinkx.util;
 
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -68,7 +68,7 @@ public class StringUtilTest {
 
     @Test
     public void row2stringTest() throws Exception{
-        Row row = new Row(4);
+        FlinkxRow row = new FlinkxRow(4);
         row.setField(0, "test");
         row.setField(1, "");
         row.setField(2, null);

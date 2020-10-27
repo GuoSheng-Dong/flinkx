@@ -31,7 +31,7 @@ import com.dtstack.flinkx.restore.FormatState;
 import com.dtstack.flinkx.util.ExceptionUtil;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.math3.util.Pair;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,7 +129,7 @@ public class HiveOutputFormat extends RichOutputFormat {
     }
 
     @Override
-    protected void writeSingleRecordInternal(Row row) throws WriteRecordException {
+    protected void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException {
     }
 
 
@@ -168,7 +168,7 @@ public class HiveOutputFormat extends RichOutputFormat {
     }
 
     @Override
-    public void writeRecord(Row row) throws IOException {
+    public void writeRecord(FlinkxRow row) throws IOException {
         try {
             if (row.getArity() == 2) {
                 Object obj = row.getField(0);
@@ -188,10 +188,10 @@ public class HiveOutputFormat extends RichOutputFormat {
         closeOutputFormats();
     }
 
-    private void emitWithMap(Map<String, Object> event, Row row) throws Exception {
+    private void emitWithMap(Map<String, Object> event, FlinkxRow row) throws Exception {
         String tablePath = PathConverterUtil.regaxByRules(event, tableBasePath, distributeTableMapping);
         Pair<HdfsOutputFormat, TableInfo> formatPair = getHdfsOutputFormat(tablePath, event);
-        Row rowData = setChannelInformation(event, row.getField(1), formatPair.getSecond().getColumns());
+        FlinkxRow rowData = setChannelInformation(event, row.getField(1), formatPair.getSecond().getColumns());
         formatPair.getFirst().writeRecord(rowData);
         //row包含map嵌套的数据内容和channel， 而rowData是非常简单的纯数据，此处补上数据差额
         if(bytesWriteCounter != null){
@@ -199,8 +199,8 @@ public class HiveOutputFormat extends RichOutputFormat {
         }
     }
 
-    private Row setChannelInformation(Map<String, Object> event, Object channel, List<String> columns) {
-        Row rowData = new Row(columns.size() + 1);
+    private FlinkxRow setChannelInformation(Map<String, Object> event, Object channel, List<String> columns) {
+        FlinkxRow rowData = new FlinkxRow(columns.size() + 1);
         for (int i = 0; i < columns.size(); i++) {
             rowData.setField(i, event.get(columns.get(i)));
         }
@@ -208,7 +208,7 @@ public class HiveOutputFormat extends RichOutputFormat {
         return rowData;
     }
 
-    private void emitWithRow(Row rowData) throws Exception {
+    private void emitWithRow(FlinkxRow rowData) throws Exception {
         Pair<HdfsOutputFormat, TableInfo> formatPair = getHdfsOutputFormat(tableBasePath, null);
         formatPair.getFirst().writeRecord(rowData);
     }

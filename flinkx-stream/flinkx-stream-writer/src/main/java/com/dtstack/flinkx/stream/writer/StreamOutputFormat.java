@@ -20,7 +20,7 @@ package com.dtstack.flinkx.stream.writer;
 
 import com.dtstack.flinkx.exception.WriteRecordException;
 import com.dtstack.flinkx.outputformat.RichOutputFormat;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.io.IOException;
 
@@ -40,7 +40,7 @@ public class StreamOutputFormat extends RichOutputFormat {
     }
 
     @Override
-    protected void writeSingleRecordInternal(Row row) throws WriteRecordException {
+    protected void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException {
         if (print) {
             System.out.println(String.format("subTaskIndex[%s]:%s", taskNumber, row));
         }
@@ -53,13 +53,13 @@ public class StreamOutputFormat extends RichOutputFormat {
     @Override
     protected void writeMultipleRecordsInternal() throws Exception {
         if (print) {
-            for (Row row : rows) {
+            for (FlinkxRow row : rows) {
                 System.out.println(row);
             }
         }
 
         if (restoreConfig.isRestore()) {
-            Row row = rows.get(rows.size() - 1);
+            FlinkxRow row = rows.get(rows.size() - 1);
             formatState.setState(row.getField(restoreConfig.getRestoreColumnIndex()));
         }
     }

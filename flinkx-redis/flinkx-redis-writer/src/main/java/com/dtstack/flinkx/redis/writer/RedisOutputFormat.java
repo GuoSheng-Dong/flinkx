@@ -25,7 +25,7 @@ import com.dtstack.flinkx.redis.DataType;
 import com.dtstack.flinkx.redis.JedisUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
@@ -94,7 +94,7 @@ public class RedisOutputFormat extends RichOutputFormat {
     }
 
     @Override
-    protected void writeSingleRecordInternal(Row row) throws WriteRecordException {
+    protected void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException {
         processTimeFormat(row);
         String key = concatKey(row);
         String[] values = getValues(row);
@@ -126,7 +126,7 @@ public class RedisOutputFormat extends RichOutputFormat {
         }
     }
 
-    private void processTimeFormat(Row row){
+    private void processTimeFormat(FlinkxRow row){
         for (int i = 0; i < row.getArity(); i++) {
             if(row.getField(i) instanceof Date){
                 if (StringUtils.isNotBlank(dateFormat)){
@@ -138,7 +138,7 @@ public class RedisOutputFormat extends RichOutputFormat {
         }
     }
 
-    private List<Object> getFieldAndValue(Row row){
+    private List<Object> getFieldAndValue(FlinkxRow row){
         if(row.getArity() - keyIndexes.size() != 2){
             throw new IllegalArgumentException("Each row record can have only one pair of attributes and values except key");
         }
@@ -155,7 +155,7 @@ public class RedisOutputFormat extends RichOutputFormat {
         return values;
     }
 
-    private String[] getValues(Row row){
+    private String[] getValues(FlinkxRow row){
         List<String> values = new ArrayList<>();
 
         for (int i = 0; i < row.getArity(); i++) {
@@ -167,11 +167,11 @@ public class RedisOutputFormat extends RichOutputFormat {
         return values.toArray(new String[values.size()]);
     }
 
-    private String concatValues(Row row){
+    private String concatValues(FlinkxRow row){
         return StringUtils.join(getValues(row),valueFieldDelimiter);
     }
 
-    private String concatKey(Row row){
+    private String concatKey(FlinkxRow row){
         if (keyIndexes.size() == 1){
             return String.valueOf(row.getField(keyIndexes.get(0)));
         } else {

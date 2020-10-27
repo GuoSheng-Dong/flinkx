@@ -20,7 +20,7 @@ package com.dtstack.flinkx.util;
 
 import com.dtstack.flinkx.enums.ColumnType;
 import com.dtstack.flinkx.exception.WriteRecordException;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -192,7 +192,7 @@ public class StringUtil {
     }
 
 
-    public static String row2string(Row row, List<String> columnTypes, String delimiter, List<String> columnNames) throws WriteRecordException {
+    public static String row2string(FlinkxRow row, List<String> columnTypes, String delimiter, List<String> columnNames) throws WriteRecordException {
         // convert row to string
         int cnt = row.getArity();
         StringBuilder sb = new StringBuilder();
@@ -213,7 +213,7 @@ public class StringUtil {
                 sb.append(col2string(column, columnTypes.get(i)));
             }
         } catch(Exception ex) {
-            String msg = "StringUtil.row2string error: when converting field[" + i + "] in Row(" + row + ")";
+            String msg = "StringUtil.row2string error: when converting field[" + i + "] in FlinkxRow(" + row + ")";
             throw new WriteRecordException(msg, ex, i, row);
         }
 

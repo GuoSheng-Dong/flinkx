@@ -24,7 +24,7 @@ import com.dtstack.flinkx.reader.DataReader;
 import com.dtstack.flinkx.reader.MetaColumn;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import java.util.List;
 import java.util.Map;
 import static com.dtstack.flinkx.odps.OdpsConfigKeys.*;
@@ -53,7 +53,7 @@ public class OdpsReader extends DataReader {
     }
 
     @Override
-    public DataStream<Row> readData() {
+    public DataStream<FlinkxRow> readData() {
         OdpsInputFormatBuilder builder = new OdpsInputFormatBuilder();
 
         builder.setMetaColumn(metaColumns);

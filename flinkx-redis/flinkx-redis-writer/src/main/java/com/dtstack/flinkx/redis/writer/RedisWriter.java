@@ -26,7 +26,7 @@ import com.dtstack.flinkx.redis.JedisUtil;
 import com.dtstack.flinkx.writer.DataWriter;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +95,7 @@ public class RedisWriter extends DataWriter {
     }
 
     @Override
-    public DataStreamSink<?> writeData(DataStream<Row> dataSet) {
+    public DataStreamSink<?> writeData(DataStream<FlinkxRow> dataSet) {
         RedisOutputFormatBuilder builder = new RedisOutputFormatBuilder();
 
         builder.setHostPort(hostPort);

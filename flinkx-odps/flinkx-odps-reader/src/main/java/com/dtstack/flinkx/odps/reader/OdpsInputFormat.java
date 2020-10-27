@@ -34,7 +34,7 @@ import org.apache.flink.api.common.io.statistics.BaseStatistics;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.io.InputSplit;
 import org.apache.flink.core.io.InputSplitAssigner;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -160,14 +160,14 @@ public class OdpsInputFormat extends RichInputFormat {
     }
 
     @Override
-    public Row nextRecordInternal(Row row) throws IOException {
+    public FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
         if (metaColumns.size() == 1 && "*".equals(metaColumns.get(0).getName())){
-            row = new Row(record.getColumnCount());
+            row = new FlinkxRow(record.getColumnCount());
             for (int i = 0; i < record.getColumnCount(); i++) {
                 row.setField(i,record.get(i));
             }
         } else {
-            row = new Row(metaColumns.size());
+            row = new FlinkxRow(metaColumns.size());
             for (int i = 0; i < metaColumns.size(); i++) {
                 MetaColumn metaColumn = metaColumns.get(i);
 

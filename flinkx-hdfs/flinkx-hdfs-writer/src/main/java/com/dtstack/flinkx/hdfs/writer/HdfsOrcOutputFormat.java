@@ -25,7 +25,7 @@ import com.dtstack.flinkx.hdfs.ECompressType;
 import com.dtstack.flinkx.hdfs.HdfsUtil;
 import com.dtstack.flinkx.util.ColumnTypeUtil;
 import com.dtstack.flinkx.util.DateUtil;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.hadoop.hive.common.type.HiveDecimal;
 import org.apache.hadoop.hive.ql.io.orc.OrcSerde;
 import org.apache.hadoop.hive.serde2.io.HiveDecimalWritable;
@@ -140,7 +140,7 @@ public class HdfsOrcOutputFormat extends HdfsOutputFormat {
     }
 
     @Override
-    public void writeSingleRecordToFile(Row row) throws WriteRecordException {
+    public void writeSingleRecordToFile(FlinkxRow row) throws WriteRecordException {
 
         if (recordWriter == null){
             nextBlock();
@@ -178,7 +178,7 @@ public class HdfsOrcOutputFormat extends HdfsOutputFormat {
         }
     }
 
-    private void getData(List<Object> recordList, int index, Row row) throws WriteRecordException{
+    private void getData(List<Object> recordList, int index, FlinkxRow row) throws WriteRecordException{
         int j = colIndices[index];
         if(j == -1) {
             recordList.add(null);
@@ -267,8 +267,8 @@ public class HdfsOrcOutputFormat extends HdfsOutputFormat {
     }
 
     @Override
-    protected String recordConvertDetailErrorMessage(int pos, Row row) {
-        return "\nHdfsOrcOutputFormat [" + jobName + "] writeRecord error: when converting field[" + fullColumnNames.get(pos) + "] in Row(" + row + ")";
+    protected String recordConvertDetailErrorMessage(int pos, FlinkxRow row) {
+        return "\nHdfsOrcOutputFormat [" + jobName + "] writeRecord error: when converting field[" + fullColumnNames.get(pos) + "] in FlinkxRow(" + row + ")";
     }
 
     @Override

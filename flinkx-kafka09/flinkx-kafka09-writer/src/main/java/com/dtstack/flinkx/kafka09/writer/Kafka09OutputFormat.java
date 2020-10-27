@@ -10,7 +10,7 @@ import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +79,7 @@ public class Kafka09OutputFormat extends RichOutputFormat {
     }
 
     @Override
-    protected void writeSingleRecordInternal(Row row) throws WriteRecordException {
+    protected void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException {
         try {
             if (row.getArity() == 1) {
                 Object obj = row.getField(0);

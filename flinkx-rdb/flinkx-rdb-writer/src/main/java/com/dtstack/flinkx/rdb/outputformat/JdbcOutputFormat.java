@@ -29,7 +29,7 @@ import com.dtstack.flinkx.util.ClassUtil;
 import com.dtstack.flinkx.util.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ObjectUtils;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +88,7 @@ public class JdbcOutputFormat extends RichOutputFormat {
 
     protected TypeConverterInterface typeConverter;
 
-    private Row lastRow = null;
+    private FlinkxRow lastRow = null;
 
     private boolean readyCheckpoint;
 
@@ -197,7 +197,7 @@ public class JdbcOutputFormat extends RichOutputFormat {
     }
 
     @Override
-    protected void writeSingleRecordInternal(Row row) throws WriteRecordException {
+    protected void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException {
         int index = 0;
         try {
             for (; index < row.getArity(); index++) {
@@ -210,7 +210,7 @@ public class JdbcOutputFormat extends RichOutputFormat {
         }
     }
 
-    protected void processWriteException(Exception e, int index, Row row) throws WriteRecordException{
+    protected void processWriteException(Exception e, int index, FlinkxRow row) throws WriteRecordException{
         if(e instanceof SQLException){
             if(e.getMessage().contains(CONN_CLOSE_ERROR_MSG)){
                 throw new RuntimeException("Connection maybe closed", e);
@@ -224,14 +224,14 @@ public class JdbcOutputFormat extends RichOutputFormat {
     }
 
     @Override
-    protected String recordConvertDetailErrorMessage(int pos, Row row) {
-        return "\nJdbcOutputFormat [" + jobName + "] writeRecord error: when converting field[" + pos + "] in Row(" + row + ")";
+    protected String recordConvertDetailErrorMessage(int pos, FlinkxRow row) {
+        return "\nJdbcOutputFormat [" + jobName + "] writeRecord error: when converting field[" + pos + "] in FlinkxRow(" + row + ")";
     }
 
     @Override
     protected void writeMultipleRecordsInternal() throws Exception {
         try {
-            for (Row row : rows) {
+            for (FlinkxRow row : rows) {
                 for (int j = 0; j < row.getArity(); ++j) {
                     preparedStatement.setObject(j + 1, getField(row, j));
                 }
@@ -305,7 +305,7 @@ public class JdbcOutputFormat extends RichOutputFormat {
         }
     }
 
-    protected Object getField(Row row, int index) {
+    protected Object getField(FlinkxRow row, int index) {
         Object field = row.getField(index);
         String type = columnType.get(index);
         if(type.matches(DateUtil.DATE_REGEX)) {

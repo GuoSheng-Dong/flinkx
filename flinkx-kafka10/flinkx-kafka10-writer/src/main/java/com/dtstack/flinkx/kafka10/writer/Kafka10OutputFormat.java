@@ -24,7 +24,7 @@ import com.dtstack.flinkx.kafka10.Formatter;
 import com.dtstack.flinkx.kafka10.decoder.JsonDecoder;
 import com.dtstack.flinkx.outputformat.RichOutputFormat;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -84,7 +84,7 @@ public class Kafka10OutputFormat extends RichOutputFormat {
     }
 
     @Override
-    protected void writeSingleRecordInternal(Row row) throws WriteRecordException {
+    protected void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException {
         try {
             if (row.getArity() == 1) {
                 Object obj = row.getField(0);

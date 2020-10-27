@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,22 +30,22 @@ import org.apache.flink.api.common.io.DefaultInputSplitAssigner;
 import org.apache.flink.api.common.io.statistics.BaseStatistics;
 import org.apache.flink.core.io.InputSplit;
 import org.apache.flink.core.io.InputSplitAssigner;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 
 /**
  * FlinkX里面所有自定义inputFormat的抽象基类
- *
+ * <p>
  * 扩展了org.apache.flink.api.common.io.RichInputFormat, 因而可以通过{@link #getRuntimeContext()}获取运行时执行上下文
  * 自动完成
  * 用户只需覆盖openInternal,closeInternal等方法, 无需操心细节
- *
  */
-public abstract class RichInputFormat extends org.apache.flink.api.common.io.RichInputFormat<Row, InputSplit> {
+public abstract class RichInputFormat extends org.apache.flink.api.common.io.RichInputFormat<FlinkxRow, InputSplit> {
 
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
     protected String jobName = "defaultJobName";
@@ -81,13 +81,13 @@ public abstract class RichInputFormat extends org.apache.flink.api.common.io.Ric
 
     @Override
     public void open(InputSplit inputSplit) throws IOException {
-        if(!inited){
+        if (!inited) {
             initAccumulatorCollector();
             initStatisticsAccumulator();
             openByteRateLimiter();
             initRestoreInfo();
 
-            if(restoreConfig.isRestore()){
+            if (restoreConfig.isRestore()) {
                 formatState.setNumOfSubTask(indexOfSubtask);
             }
 
@@ -97,7 +97,7 @@ public abstract class RichInputFormat extends org.apache.flink.api.common.io.Ric
         openInternal(inputSplit);
     }
 
-    private void initAccumulatorCollector(){
+    private void initAccumulatorCollector() {
         String lastWriteLocation = String.format("%s_%s", Metrics.LAST_WRITE_LOCATION_PREFIX, indexOfSubtask);
         String lastWriteNum = String.format("%s_%s", Metrics.LAST_WRITE_NUM__PREFIX, indexOfSubtask);
 
@@ -112,29 +112,29 @@ public abstract class RichInputFormat extends org.apache.flink.api.common.io.Ric
         accumulatorCollector.start();
     }
 
-    private void initJobInfo(){
+    private void initJobInfo() {
         Map<String, String> vars = getRuntimeContext().getMetricGroup().getAllVariables();
-        if(vars != null && vars.get(Metrics.JOB_NAME) != null) {
+        if (vars != null && vars.get(Metrics.JOB_NAME) != null) {
             jobName = vars.get(Metrics.JOB_NAME);
         }
 
-        if(vars!= null && vars.get(Metrics.JOB_ID) != null) {
+        if (vars != null && vars.get(Metrics.JOB_ID) != null) {
             jobId = vars.get(Metrics.JOB_ID);
         }
 
-        if(vars != null && vars.get(Metrics.SUBTASK_INDEX) != null){
+        if (vars != null && vars.get(Metrics.SUBTASK_INDEX) != null) {
             indexOfSubtask = Integer.valueOf(vars.get(Metrics.SUBTASK_INDEX));
         }
     }
 
-    private void openByteRateLimiter(){
+    private void openByteRateLimiter() {
         if (this.bytes > 0) {
             this.byteRateLimiter = new ByteRateLimiter(accumulatorCollector, this.bytes);
             this.byteRateLimiter.start();
         }
     }
 
-    private void initStatisticsAccumulator(){
+    private void initStatisticsAccumulator() {
         numReadCounter = getRuntimeContext().getLongCounter(Metrics.NUM_READS);
         bytesReadCounter = getRuntimeContext().getLongCounter(Metrics.READ_BYTES);
         durationCounter = getRuntimeContext().getLongCounter(Metrics.READ_DURATION);
@@ -145,11 +145,11 @@ public abstract class RichInputFormat extends org.apache.flink.api.common.io.Ric
         inputMetric.addMetric(Metrics.READ_DURATION, durationCounter);
     }
 
-    private void initRestoreInfo(){
-        if(restoreConfig == null){
+    private void initRestoreInfo() {
+        if (restoreConfig == null) {
             restoreConfig = RestoreConfig.defaultConfig();
-        } else if(restoreConfig.isRestore()){
-            if(formatState == null){
+        } else if (restoreConfig.isRestore()) {
+            if (formatState == null) {
                 formatState = new FormatState(indexOfSubtask, null);
             } else {
                 numReadCounter.add(formatState.getMetricValue(Metrics.NUM_READS));
@@ -160,32 +160,27 @@ public abstract class RichInputFormat extends org.apache.flink.api.common.io.Ric
     }
 
     @Override
-    public Row nextRecord(Row row) throws IOException {
-        if(byteRateLimiter != null) {
+    public FlinkxRow nextRecord(FlinkxRow row) throws IOException {
+        if (byteRateLimiter != null) {
             byteRateLimiter.acquire();
         }
-        Row internalRow = nextRecordInternal(row);
+        FlinkxRow internalRow = nextRecordInternal(row);
         internalRow = setChannelInformation(internalRow);
 
         updateDuration();
-        if(numReadCounter !=null ){
+        if (numReadCounter != null) {
             numReadCounter.add(1);
         }
-        if(bytesReadCounter!=null){
-            bytesReadCounter.add(internalRow.toString().length());
+        if (bytesReadCounter != null) {
+            bytesReadCounter.add(internalRow.getObjectSize());
         }
         return internalRow;
     }
 
-    private Row setChannelInformation(Row internalRow){
-        if (internalRow != null){
-            Row rowWithChannel = new Row(internalRow.getArity() + 1);
-            for (int i = 0; i < internalRow.getArity(); i++) {
-                rowWithChannel.setField(i, internalRow.getField(i));
-            }
-
-            rowWithChannel.setField(internalRow.getArity(), indexOfSubtask);
-            return rowWithChannel;
+    private FlinkxRow setChannelInformation(FlinkxRow internalRow) {
+        if (internalRow != null) {
+            internalRow.setIndexOfSubTask(indexOfSubtask);
+            return internalRow;
         }
 
         return null;
@@ -193,55 +188,56 @@ public abstract class RichInputFormat extends org.apache.flink.api.common.io.Ric
 
     /**
      * Get the recover point of current channel
+     *
      * @return DataRecoverPoint
      */
     public FormatState getFormatState() {
-        if (formatState != null && numReadCounter != null && inputMetric!= null) {
+        if (formatState != null && numReadCounter != null && inputMetric != null) {
             formatState.setMetric(inputMetric.getMetricCounters());
         }
         return formatState;
     }
 
-    protected abstract Row nextRecordInternal(Row row) throws IOException;
+    protected abstract FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException;
 
     @Override
     public void close() throws IOException {
-        try{
+        try {
             closeInternal();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void closeInputFormat() throws IOException {
-        if(durationCounter != null){
+        if (durationCounter != null) {
             updateDuration();
         }
 
-        if(inputMetric != null){
+        if (inputMetric != null) {
             inputMetric.waitForReportMetrics();
         }
 
-        if(byteRateLimiter != null){
+        if (byteRateLimiter != null) {
             byteRateLimiter.stop();
         }
 
-        if(accumulatorCollector != null){
+        if (accumulatorCollector != null) {
             accumulatorCollector.close();
         }
 
         LOG.info("subtask input close finished");
     }
 
-    private void updateDuration(){
-        if(durationCounter !=null ){
+    private void updateDuration() {
+        if (durationCounter != null) {
             durationCounter.resetLocal();
             durationCounter.add(System.currentTimeMillis() - startTime);
         }
     }
 
-    protected abstract  void closeInternal() throws IOException;
+    protected abstract void closeInternal() throws IOException;
 
     @Override
     public BaseStatistics getStatistics(BaseStatistics baseStatistics) throws IOException {

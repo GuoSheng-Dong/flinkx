@@ -24,7 +24,7 @@ import com.dtstack.flinkx.rdb.util.DBUtil;
 import com.dtstack.flinkx.util.DateUtil;
 import com.dtstack.flinkx.util.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -82,7 +82,7 @@ public class MysqldInputFormat extends DistributedJdbcInputFormat {
 
             hasNext = currentResultSet.next();
             if (hasNext){
-                currentRecord = new Row(columnCount);
+                currentRecord = new FlinkxRow(columnCount);
 
                 for (int pos = 0; pos < currentRecord.getArity(); pos++) {
                     Object obj = currentResultSet.getObject(pos + 1);

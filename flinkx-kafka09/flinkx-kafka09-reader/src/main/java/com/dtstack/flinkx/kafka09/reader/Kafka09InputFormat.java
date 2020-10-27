@@ -28,7 +28,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.io.GenericInputSplit;
 import org.apache.flink.core.io.InputSplit;
 import org.apache.flink.core.io.InputSplitAssigner;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +62,7 @@ public class Kafka09InputFormat extends RichInputFormat {
 
     private volatile boolean running = false;
 
-    private transient BlockingQueue<Row> queue;
+    private transient BlockingQueue<FlinkxRow> queue;
 
     private transient ExecutorService executor;
 
@@ -82,7 +82,7 @@ public class Kafka09InputFormat extends RichInputFormat {
     }
 
     @Override
-    protected Row nextRecordInternal(Row row) throws IOException {
+    protected FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
         try {
             row = queue.take();
         } catch (InterruptedException e) {
@@ -108,7 +108,7 @@ public class Kafka09InputFormat extends RichInputFormat {
         consumerConnector = kafka.consumer.Consumer.createJavaConsumerConnector(new ConsumerConfig(props));
 
         executor = Executors.newFixedThreadPool(1);
-        queue = new SynchronousQueue<Row>(false);
+        queue = new SynchronousQueue<FlinkxRow>(false);
     }
 
     private Properties geneConsumerProp() {
@@ -144,7 +144,7 @@ public class Kafka09InputFormat extends RichInputFormat {
 
     public void processEvent(Map<String, Object> event) {
         try {
-            queue.put(Row.of(event));
+            queue.put(FlinkxRow.of(event));
         } catch (InterruptedException e) {
             LOG.error("takeEvent interrupted event:{} error:{}", event, e);
         }

@@ -40,7 +40,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.hadoop.shaded.org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.flink.hadoop.shaded.org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.flink.streaming.api.operators.StreamingRuntimeContext;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +58,7 @@ import static com.dtstack.flinkx.writer.WriteErrorTypes.*;
  * Company: www.dtstack.com
  * @author huyifan.zju@163.com
  */
-public abstract class RichOutputFormat extends org.apache.flink.api.common.io.RichOutputFormat<Row> implements CleanupWhenUnsuccessful {
+public abstract class RichOutputFormat extends org.apache.flink.api.common.io.RichOutputFormat<FlinkxRow> implements CleanupWhenUnsuccessful {
 
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
 
@@ -82,7 +82,7 @@ public abstract class RichOutputFormat extends org.apache.flink.api.common.io.Ri
     protected int batchInterval = 1;
 
     /** 存储用于批量写入的数据 */
-    protected List<Row> rows = new ArrayList();
+    protected List<FlinkxRow> rows = new ArrayList();
 
     /** 总记录数 */
     protected LongCounter numWriteCounter;
@@ -316,7 +316,7 @@ public abstract class RichOutputFormat extends org.apache.flink.api.common.io.Ri
 
     }
 
-    protected void writeSingleRecord(Row row) {
+    protected void writeSingleRecord(FlinkxRow row) {
         if(errorLimiter != null) {
             errorLimiter.acquire();
         }
@@ -338,7 +338,7 @@ public abstract class RichOutputFormat extends org.apache.flink.api.common.io.Ri
         }
     }
 
-    private void saveErrorData(Row row, WriteRecordException e){
+    private void saveErrorData(FlinkxRow row, WriteRecordException e){
         errCounter.add(1);
 
         String errMsg = ExceptionUtil.getErrorMessage(e);
@@ -353,7 +353,7 @@ public abstract class RichOutputFormat extends org.apache.flink.api.common.io.Ri
         }
     }
 
-    private void updateStatisticsOfDirtyData(Row row, WriteRecordException e){
+    private void updateStatisticsOfDirtyData(FlinkxRow row, WriteRecordException e){
         if(dirtyDataManager != null) {
             String errorType = dirtyDataManager.writeData(row, e);
             if (ERR_NULL_POINTER.equals(errorType)){
@@ -368,11 +368,11 @@ public abstract class RichOutputFormat extends org.apache.flink.api.common.io.Ri
         }
     }
 
-    protected String recordConvertDetailErrorMessage(int pos, Row row) {
-        return getClass().getName() + " WriteRecord error: when converting field[" + pos + "] in Row(" + row + ")";
+    protected String recordConvertDetailErrorMessage(int pos, FlinkxRow row) {
+        return getClass().getName() + " WriteRecord error: when converting field[" + pos + "] in FlinkxRow(" + row + ")";
     }
 
-    protected abstract void writeSingleRecordInternal(Row row) throws WriteRecordException;
+    protected abstract void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException;
 
     protected void writeMultipleRecords() throws Exception {
         writeMultipleRecordsInternal();
@@ -399,8 +399,8 @@ public abstract class RichOutputFormat extends org.apache.flink.api.common.io.Ri
     }
 
     @Override
-    public void writeRecord(Row row) throws IOException {
-        Row internalRow = setChannelInfo(row);
+    public void writeRecord(FlinkxRow row) throws IOException {
+        FlinkxRow internalRow = setChannelInfo(row);
         if(batchInterval <= 1) {
             writeSingleRecord(internalRow);
         } else {
@@ -412,16 +412,12 @@ public abstract class RichOutputFormat extends org.apache.flink.api.common.io.Ri
 
         updateDuration();
         if(bytesWriteCounter!=null){
-            bytesWriteCounter.add(row.toString().length());
+            bytesWriteCounter.add(row.getObjectSize());
         }
     }
 
-    private Row setChannelInfo(Row row){
-        Row internalRow = new Row(row.getArity() - 1);
-        for (int i = 0; i < internalRow.getArity(); i++) {
-            internalRow.setField(i, row.getField(i));
-        }
-        return internalRow;
+    private FlinkxRow setChannelInfo(FlinkxRow row){
+        return row;
     }
 
     @Override

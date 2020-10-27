@@ -31,7 +31,7 @@ import com.dtstack.flinkx.reader.MetaColumn;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +84,7 @@ public class DistributedJdbcDataReader extends DataReader {
     }
 
     @Override
-    public DataStream<Row> readData() {
+    public DataStream<FlinkxRow> readData() {
         DistributedJdbcInputFormatBuilder builder = new DistributedJdbcInputFormatBuilder(databaseInterface.getDatabaseType().name());
         builder.setDrivername(databaseInterface.getDriverClass());
         builder.setUsername(username);

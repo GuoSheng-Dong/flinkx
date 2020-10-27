@@ -24,7 +24,7 @@ import com.dtstack.flinkx.util.StringUtil;
 import com.dtstack.flinkx.outputformat.RichOutputFormat;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -77,7 +77,7 @@ public class EsOutputFormat extends RichOutputFormat {
     }
 
     @Override
-    protected void writeSingleRecordInternal(Row row) throws WriteRecordException {
+    protected void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException {
         String id = getId(row);
         IndexRequest request = StringUtils.isBlank(id) ? new IndexRequest(index, type) : new IndexRequest(index, type, id);
         request = request.source(EsUtil.rowToJsonMap(row, columnNames, columnTypes));
@@ -91,7 +91,7 @@ public class EsOutputFormat extends RichOutputFormat {
     @Override
     protected void writeMultipleRecordsInternal() throws Exception {
         bulkRequest = new BulkRequest();
-        for(Row row : rows) {
+        for(FlinkxRow row : rows) {
             String id = getId(row);
             IndexRequest request = StringUtils.isBlank(id) ? new IndexRequest(index, type) : new IndexRequest(index, type, id);
             request = request.source(EsUtil.rowToJsonMap(row, columnNames, columnTypes));
@@ -130,7 +130,7 @@ public class EsOutputFormat extends RichOutputFormat {
     }
 
 
-    private String getId(Row record) throws WriteRecordException {
+    private String getId(FlinkxRow record) throws WriteRecordException {
         if(idColumnIndices == null || idColumnIndices.size() == 0) {
             return null;
         }
@@ -148,7 +148,7 @@ public class EsOutputFormat extends RichOutputFormat {
                 }
             }
         } catch(Exception ex) {
-            String msg = getClass().getName() + " Writing record error: when converting field[" + i + "] in Row(" + record + ")";
+            String msg = getClass().getName() + " Writing record error: when converting field[" + i + "] in FlinkxRow(" + record + ")";
             throw new WriteRecordException(msg, ex, i, record);
         }
 

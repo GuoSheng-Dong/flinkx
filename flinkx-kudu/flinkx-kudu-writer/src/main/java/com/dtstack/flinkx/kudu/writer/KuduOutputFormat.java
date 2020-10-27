@@ -27,7 +27,7 @@ import com.dtstack.flinkx.outputformat.RichOutputFormat;
 import com.dtstack.flinkx.reader.MetaColumn;
 import com.dtstack.flinkx.util.ExceptionUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.kudu.client.*;
 
 import java.io.IOException;
@@ -80,7 +80,7 @@ public class KuduOutputFormat extends RichOutputFormat {
         }
 
     @Override
-    protected void writeSingleRecordInternal(Row row) throws WriteRecordException {
+    protected void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException {
         writeData(row);
 
         if(numWriteCounter.getLocalValue() % batchInterval == 0){
@@ -93,7 +93,7 @@ public class KuduOutputFormat extends RichOutputFormat {
         }
     }
 
-    private void writeData(Row row) throws WriteRecordException {
+    private void writeData(FlinkxRow row) throws WriteRecordException {
         int index = 0;
         try {
             Operation operation = getOperation();
@@ -125,7 +125,7 @@ public class KuduOutputFormat extends RichOutputFormat {
     @Override
     protected void writeMultipleRecordsInternal() throws Exception {
         LOG.info("writeRecordInternal, row size = {}", rows.size());
-        for (Row row : rows) {
+        for (FlinkxRow row : rows) {
             writeData(row);
         }
         session.flush();

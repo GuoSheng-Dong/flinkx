@@ -24,7 +24,7 @@ import com.dtstack.flinkx.restore.FormatState;
 import com.dtstack.flinkx.util.ExceptionUtil;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.io.IOException;
 
@@ -34,7 +34,7 @@ import java.io.IOException;
  */
 public abstract class FileOutputFormat extends RichOutputFormat {
 
-    protected Row lastRow;
+    protected FlinkxRow lastRow;
 
     protected String currentBlockFileNamePrefix;
 
@@ -151,7 +151,7 @@ public abstract class FileOutputFormat extends RichOutputFormat {
     }
 
     @Override
-    public void writeSingleRecordInternal(Row row) throws WriteRecordException {
+    public void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException {
         if (restoreConfig.isRestore() && !restoreConfig.isStream()){
             if(lastRow != null){
                 readyCheckpoint = !ObjectUtils.equals(lastRow.getField(restoreConfig.getRestoreColumnIndex()),
@@ -352,7 +352,7 @@ public abstract class FileOutputFormat extends RichOutputFormat {
 
     protected abstract void flushDataInternal() throws IOException;
 
-    protected abstract void writeSingleRecordToFile(Row row) throws WriteRecordException;
+    protected abstract void writeSingleRecordToFile(FlinkxRow row) throws WriteRecordException;
 
     protected abstract void createFinishedTag() throws IOException;
 

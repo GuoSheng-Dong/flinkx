@@ -22,7 +22,7 @@ import com.dtstack.flinkx.reader.MetaColumn;
 import com.github.jsonzou.jmockdata.JMockData;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -69,8 +69,8 @@ public class MockDataUtil {
         return mockData;
     }
 
-    public static Row getMockRow(List<MetaColumn> columns){
-        Row mockRow = new Row(columns.size());
+    public static FlinkxRow getMockRow(List<MetaColumn> columns){
+        FlinkxRow mockRow = new FlinkxRow(columns.size());
         for (int i = 0; i < columns.size(); i++) {
             if(columns.get(i).getValue() != null){
                 if("null".equalsIgnoreCase(columns.get(i).getValue())){

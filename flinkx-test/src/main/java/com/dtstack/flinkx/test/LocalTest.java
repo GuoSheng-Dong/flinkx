@@ -78,7 +78,7 @@ import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.transformations.PartitionTransformation;
 import org.apache.flink.streaming.runtime.partitioner.DTRebalancePartitioner;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,7 +146,7 @@ public class LocalTest {
         env.setRestartStrategy(RestartStrategies.noRestart());
 
         DataReader reader = buildDataReader(config, env);
-        DataStream<Row> dataStream = reader.readData();
+        DataStream<FlinkxRow> dataStream = reader.readData();
 
         dataStream = new DataStream<>(dataStream.getExecutionEnvironment(),
                 new PartitionTransformation<>(dataStream.getTransformation(),

@@ -21,7 +21,7 @@ package com.dtstack.flinkx.hbase.writer;
 import com.dtstack.flinkx.hbase.writer.function.FunctionFactory;
 import com.dtstack.flinkx.hbase.writer.function.IFunction;
 import org.apache.commons.lang.StringUtils;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +64,7 @@ public class RowKeyFunction {
         init();
     }
 
-    public byte[] resolve(Row record, String value, ColumnType columnType) {
+    public byte[] resolve(FlinkxRow record, String value, ColumnType columnType) {
         String rowKeyValue = value;
         List<String> rowKeyColumnNames = rowKeyColumnNamesMap.get(value);
         if (rowKeyColumnNames != null) {

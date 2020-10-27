@@ -30,7 +30,7 @@ import org.apache.flink.api.common.io.statistics.BaseStatistics;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.io.InputSplit;
 import org.apache.flink.core.io.InputSplitAssigner;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
@@ -235,8 +235,8 @@ public class HbaseInputFormat extends RichInputFormat {
     }
 
     @Override
-    public Row nextRecordInternal(Row row) throws IOException {
-        row = new Row(columnTypes.size());
+    public FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
+        row = new FlinkxRow(columnTypes.size());
 
         for (int i = 0; i < columnTypes.size(); ++i) {
             String columnType = columnTypes.get(i);

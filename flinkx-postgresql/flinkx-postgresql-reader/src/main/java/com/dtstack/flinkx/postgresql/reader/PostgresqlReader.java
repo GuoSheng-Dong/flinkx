@@ -28,7 +28,7 @@ import com.dtstack.flinkx.rdb.inputformat.JdbcInputFormatBuilder;
 import com.dtstack.flinkx.rdb.util.DBUtil;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 /**
  * The reader plugin for PostgreSQL database
@@ -46,7 +46,7 @@ public class PostgresqlReader extends JdbcDataReader {
     }
 
     @Override
-    public DataStream<Row> readData() {
+    public DataStream<FlinkxRow> readData() {
         JdbcInputFormatBuilder builder = new JdbcInputFormatBuilder(databaseInterface.getDatabaseType().name());
         builder.setDrivername(databaseInterface.getDriverClass());
         builder.setDBUrl(dbUrl);

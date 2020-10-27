@@ -24,7 +24,7 @@ import com.dtstack.flinkx.reader.DataReader;
 import com.dtstack.flinkx.reader.MetaColumn;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +83,7 @@ public class MongodbReader extends DataReader {
     }
 
     @Override
-    public DataStream<Row> readData() {
+    public DataStream<FlinkxRow> readData() {
         MongodbInputFormatBuilder builder = new MongodbInputFormatBuilder();
         builder.setHostPorts(hostPorts);
         builder.setUsername(username);

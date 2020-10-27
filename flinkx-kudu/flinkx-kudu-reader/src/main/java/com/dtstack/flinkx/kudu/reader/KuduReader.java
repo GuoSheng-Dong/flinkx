@@ -27,7 +27,7 @@ import com.dtstack.flinkx.reader.DataReader;
 import com.dtstack.flinkx.reader.MetaColumn;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.kudu.client.AsyncKuduClient;
 
 import java.util.List;
@@ -69,7 +69,7 @@ public class KuduReader extends DataReader {
     }
 
     @Override
-    public DataStream<Row> readData() {
+    public DataStream<FlinkxRow> readData() {
         KuduInputFormatBuilder builder = new KuduInputFormatBuilder();
         builder.setColumns(columns);
         builder.setMonitorUrls(monitorUrls);

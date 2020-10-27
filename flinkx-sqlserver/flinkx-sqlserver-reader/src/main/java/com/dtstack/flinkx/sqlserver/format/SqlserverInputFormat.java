@@ -21,7 +21,7 @@ import com.dtstack.flinkx.enums.ColumnType;
 import com.dtstack.flinkx.rdb.inputformat.JdbcInputFormat;
 import com.dtstack.flinkx.rdb.util.DBUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -37,11 +37,11 @@ import static com.dtstack.flinkx.rdb.util.DBUtil.clobToString;
 public class SqlserverInputFormat extends JdbcInputFormat {
 
     @Override
-    public Row nextRecordInternal(Row row) throws IOException {
+    public FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
         if (!hasNext) {
             return null;
         }
-        row = new Row(columnCount);
+        row = new FlinkxRow(columnCount);
 
         try {
             for (int pos = 0; pos < row.getArity(); pos++) {

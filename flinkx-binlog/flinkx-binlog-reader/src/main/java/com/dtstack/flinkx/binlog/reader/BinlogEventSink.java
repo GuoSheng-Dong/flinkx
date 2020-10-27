@@ -20,7 +20,7 @@ package com.dtstack.flinkx.binlog.reader;
 import com.alibaba.otter.canal.common.AbstractCanalLifeCycle;
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.sink.exception.CanalSinkException;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class BinlogEventSink extends AbstractCanalLifeCycle implements com.aliba
 
     private BinlogInputFormat format;
 
-    private BlockingQueue<Row> queue;
+    private BlockingQueue<FlinkxRow> queue;
 
     private boolean pavingData;
 
@@ -117,7 +117,7 @@ public class BinlogEventSink extends AbstractCanalLifeCycle implements com.aliba
             }
 
             try {
-                queue.put(Row.of(message));
+                queue.put(FlinkxRow.of(message));
             } catch (InterruptedException e) {
                 LOG.error("takeEvent interrupted message:{} error:{}", message, e);
             }
@@ -137,8 +137,8 @@ public class BinlogEventSink extends AbstractCanalLifeCycle implements com.aliba
         this.pavingData = pavingData;
     }
 
-    public Row takeEvent() {
-        Row row = null;
+    public FlinkxRow takeEvent() {
+        FlinkxRow row = null;
         try {
             row = queue.take();
         } catch (InterruptedException e) {

@@ -42,7 +42,7 @@ import org.apache.flink.core.io.InputSplit;
 import org.apache.flink.core.io.InputSplitAssigner;
 import org.apache.flink.hadoop.shaded.org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.flink.hadoop.shaded.org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -121,7 +121,7 @@ public class JdbcInputFormat extends RichInputFormat {
 
     private MetaColumn restoreColumn;
 
-    private Row lastRow = null;
+    private FlinkxRow lastRow = null;
 
     /**
      * The hadoop config for metric
@@ -226,7 +226,7 @@ public class JdbcInputFormat extends RichInputFormat {
     }
 
     @Override
-    public Row nextRecordInternal(Row row) throws IOException {
+    public FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
         try {
             if(!"*".equals(metaColumns.get(0).getName())){
                 for (int i = 0; i < columnCount; i++) {

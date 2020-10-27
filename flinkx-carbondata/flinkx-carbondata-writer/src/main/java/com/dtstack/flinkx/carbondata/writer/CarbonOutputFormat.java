@@ -33,7 +33,7 @@ import org.apache.carbondata.core.statusmanager.SegmentStatus;
 import org.apache.carbondata.core.statusmanager.SegmentStatusManager;
 import org.apache.flink.api.common.io.CleanupWhenUnsuccessful;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.flink.util.Preconditions;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -179,7 +179,7 @@ public class CarbonOutputFormat extends RichOutputFormat implements CleanupWhenU
 
 
     @Override
-    protected void writeSingleRecordInternal(Row row) throws WriteRecordException {
+    protected void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException {
         int i = 0;
         try {
             String[] record = new String[fullColumnNames.size()];

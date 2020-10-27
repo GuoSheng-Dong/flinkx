@@ -21,7 +21,7 @@ import com.dtstack.flinkx.enums.EWriteMode;
 import com.dtstack.flinkx.exception.WriteRecordException;
 import com.dtstack.flinkx.rdb.outputformat.JdbcOutputFormat;
 import com.google.common.base.Strings;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;
 
@@ -71,7 +71,7 @@ public class PostgresqlOutputFormat extends JdbcOutputFormat {
     }
 
     @Override
-    protected void writeSingleRecordInternal(Row row) throws WriteRecordException {
+    protected void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException {
         if(!checkIsCopyMode(insertSqlMode)){
             super.writeSingleRecordInternal(row);
             return;
@@ -103,7 +103,7 @@ public class PostgresqlOutputFormat extends JdbcOutputFormat {
         }
 
         StringBuilder sb = new StringBuilder(128);
-        for (Row row : rows) {
+        for (FlinkxRow row : rows) {
             int lastIndex = row.getArity() - 1;
             for (int index =0; index < row.getArity(); index++) {
                 Object rowData = getField(row, index);
@@ -126,7 +126,7 @@ public class PostgresqlOutputFormat extends JdbcOutputFormat {
     }
 
     @Override
-    protected Object getField(Row row, int index) {
+    protected Object getField(FlinkxRow row, int index) {
         Object field = super.getField(row, index);
         String type = columnType.get(index);
         field = typeConverter.convert(field,type);

@@ -27,7 +27,7 @@ import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.DtInputFormatSourceFunction;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.flink.util.Preconditions;
 
 import java.util.ArrayList;
@@ -108,9 +108,9 @@ public abstract class DataReader {
         }
     }
 
-    public abstract DataStream<Row> readData();
+    public abstract DataStream<FlinkxRow> readData();
 
-    protected DataStream<Row> createInput(InputFormat inputFormat, String sourceName) {
+    protected DataStream<FlinkxRow> createInput(InputFormat inputFormat, String sourceName) {
         Preconditions.checkNotNull(sourceName);
         Preconditions.checkNotNull(inputFormat);
         TypeInformation typeInfo = TypeExtractor.getInputFormatTypes(inputFormat);

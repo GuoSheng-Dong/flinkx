@@ -42,7 +42,7 @@ import org.apache.flink.streaming.api.environment.StreamContextEnvironment;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.transformations.PartitionTransformation;
 import org.apache.flink.streaming.runtime.partitioner.DTRebalancePartitioner;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,7 +95,7 @@ public class Main {
         env.setParallelism(config.getJob().getSetting().getSpeed().getChannel());
         env.setRestartStrategy(RestartStrategies.noRestart());
         DataReader dataReader = DataReaderFactory.getDataReader(config, env);
-        DataStream<Row> dataStream = dataReader.readData();
+        DataStream<FlinkxRow> dataStream = dataReader.readData();
 
         dataStream = new DataStream<>(dataStream.getExecutionEnvironment(),
                 new PartitionTransformation<>(dataStream.getTransformation(),

@@ -20,7 +20,7 @@ package com.dtstack.flinkx.oracle.format;
 import com.dtstack.flinkx.enums.ColumnType;
 import com.dtstack.flinkx.rdb.outputformat.JdbcOutputFormat;
 import com.dtstack.flinkx.util.DateUtil;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -38,7 +38,7 @@ import java.util.Map;
 public class OracleOutputFormat extends JdbcOutputFormat {
 
     @Override
-    protected Object getField(Row row, int index) {
+    protected Object getField(FlinkxRow row, int index) {
         Object field = super.getField(row, index);
         String type = columnType.get(index);
 

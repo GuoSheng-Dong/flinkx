@@ -27,7 +27,7 @@ import com.dtstack.flinkx.reader.MetaColumn;
 import com.dtstack.flinkx.writer.DataWriter;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.util.List;
 import java.util.Map;
@@ -92,7 +92,7 @@ public class JdbcDataWriter extends DataWriter {
     }
 
     @Override
-    public DataStreamSink<?> writeData(DataStream<Row> dataSet) {
+    public DataStreamSink<?> writeData(DataStream<FlinkxRow> dataSet) {
         JdbcOutputFormatBuilder builder = new JdbcOutputFormatBuilder(databaseInterface.getDatabaseType().name());
         builder.setDriverName(databaseInterface.getDriverClass());
         builder.setDBUrl(dbUrl);

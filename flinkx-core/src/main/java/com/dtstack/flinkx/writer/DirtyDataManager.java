@@ -25,7 +25,7 @@ import com.dtstack.flinkx.util.RowUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -73,7 +73,7 @@ public class DirtyDataManager {
         this.jobId = jobId;
     }
 
-    public String writeData(Row row, WriteRecordException ex) {
+    public String writeData(FlinkxRow row, WriteRecordException ex) {
         String content = RowUtil.rowToJson(row, fieldNames);
         String errorType = retrieveCategory(ex);
         String line = StringUtils.join(new String[]{content,errorType, gson.toJson(ex.toString()), DateUtil.timestampToString(new Date()) }, FIELD_DELIMITER);

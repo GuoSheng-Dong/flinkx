@@ -30,7 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.util.List;
 
@@ -98,7 +98,7 @@ public class JdbcDataReader extends DataReader {
     }
 
     @Override
-    public DataStream<Row> readData() {
+    public DataStream<FlinkxRow> readData() {
         JdbcInputFormatBuilder builder = new JdbcInputFormatBuilder(databaseInterface.getDatabaseType().name());
         builder.setDrivername(databaseInterface.getDriverClass());
         builder.setDBUrl(dbUrl);

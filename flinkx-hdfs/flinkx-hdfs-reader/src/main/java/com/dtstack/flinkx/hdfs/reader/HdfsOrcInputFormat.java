@@ -23,7 +23,7 @@ import com.dtstack.flinkx.reader.MetaColumn;
 import com.dtstack.flinkx.util.FileSystemUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flink.core.io.InputSplit;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.hive.ql.io.orc.*;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -200,9 +200,9 @@ public class HdfsOrcInputFormat extends HdfsInputFormat {
 
 
     @Override
-    public Row nextRecordInternal(Row row) throws IOException {
+    public FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
         if(metaColumns.size() == 1 && "*".equals(metaColumns.get(0).getName())){
-            row = new Row(fullColNames.length);
+            row = new FlinkxRow(fullColNames.length);
             for (int i = 0; i < fullColNames.length; i++) {
                 Object col = inspector.getStructFieldData(value, fields.get(i));
                 if (col != null) {
@@ -211,7 +211,7 @@ public class HdfsOrcInputFormat extends HdfsInputFormat {
                 row.setField(i, col);
             }
         } else {
-            row = new Row(metaColumns.size());
+            row = new FlinkxRow(metaColumns.size());
             for (int i = 0; i < metaColumns.size(); i++) {
                 MetaColumn metaColumn = metaColumns.get(i);
                 Object val = null;

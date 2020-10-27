@@ -25,7 +25,7 @@ import com.dtstack.flinkx.kudu.core.KuduUtil;
 import com.dtstack.flinkx.reader.MetaColumn;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.io.InputSplit;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.kudu.Type;
 import org.apache.kudu.client.*;
 
@@ -68,8 +68,8 @@ public class KuduInputFormat extends RichInputFormat {
     }
 
     @Override
-    protected Row nextRecordInternal(Row row) throws IOException {
-        row = new Row(columns.size());
+    protected FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
+        row = new FlinkxRow(columns.size());
         RowResult rowResult = iterator.next();
 
         for (int i = 0; i < columns.size(); i++) {

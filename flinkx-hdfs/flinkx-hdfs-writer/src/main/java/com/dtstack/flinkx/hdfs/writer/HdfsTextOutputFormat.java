@@ -25,7 +25,7 @@ import com.dtstack.flinkx.hdfs.HdfsUtil;
 import com.dtstack.flinkx.util.DateUtil;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.common.type.HiveDecimal;
 import java.io.IOException;
@@ -105,7 +105,7 @@ public class HdfsTextOutputFormat extends HdfsOutputFormat {
     }
 
     @Override
-    public void writeSingleRecordToFile(Row row) throws WriteRecordException {
+    public void writeSingleRecordToFile(FlinkxRow row) throws WriteRecordException {
 
         if(stream == null){
             nextBlock();
@@ -222,8 +222,8 @@ public class HdfsTextOutputFormat extends HdfsOutputFormat {
     }
 
     @Override
-    protected String recordConvertDetailErrorMessage(int pos, Row row) {
-        return "\nHdfsTextOutputFormat [" + jobName + "] writeRecord error: when converting field[" + columnNames.get(pos) + "] in Row(" + row + ")";
+    protected String recordConvertDetailErrorMessage(int pos, FlinkxRow row) {
+        return "\nHdfsTextOutputFormat [" + jobName + "] writeRecord error: when converting field[" + columnNames.get(pos) + "] in FlinkxRow(" + row + ")";
     }
 
     @Override

@@ -22,7 +22,7 @@ import com.dtstack.flinkx.config.ReaderConfig;
 import com.dtstack.flinkx.reader.DataReader;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.util.List;
 import java.util.Map;
@@ -78,7 +78,7 @@ public class BinlogReader extends DataReader {
     }
 
     @Override
-    public DataStream<Row> readData() {
+    public DataStream<FlinkxRow> readData() {
         BinlogInputFormat format = new BinlogInputFormat();
         format.setHost(host);
         format.setPort(port);

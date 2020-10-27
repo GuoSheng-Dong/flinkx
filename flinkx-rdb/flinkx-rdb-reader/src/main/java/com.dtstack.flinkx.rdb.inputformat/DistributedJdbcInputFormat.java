@@ -29,7 +29,7 @@ import com.dtstack.flinkx.util.ClassUtil;
 import com.dtstack.flinkx.util.StringUtil;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.io.InputSplit;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.io.*;
 import java.sql.Connection;
@@ -76,7 +76,7 @@ public class DistributedJdbcInputFormat extends RichInputFormat {
 
     protected transient ResultSet currentResultSet;
 
-    protected transient Row currentRecord;
+    protected transient FlinkxRow currentRecord;
 
     protected String username;
 
@@ -156,7 +156,7 @@ public class DistributedJdbcInputFormat extends RichInputFormat {
 
             hasNext = currentResultSet.next();
             if (hasNext){
-                currentRecord = new Row(columnCount);
+                currentRecord = new FlinkxRow(columnCount);
                 if(!"*".equals(metaColumns.get(0).getName())){
                     for (int i = 0; i < columnCount; i++) {
                         Object val = currentRecord.getField(i);
@@ -187,7 +187,7 @@ public class DistributedJdbcInputFormat extends RichInputFormat {
     }
 
     @Override
-    protected Row nextRecordInternal(Row row) throws IOException {
+    protected FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
         return currentRecord;
     }
 

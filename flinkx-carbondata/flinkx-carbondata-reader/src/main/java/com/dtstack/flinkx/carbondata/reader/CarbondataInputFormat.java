@@ -31,7 +31,7 @@ import org.apache.carbondata.hadoop.api.CarbonTableInputFormat;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.io.InputSplit;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobID;
 import org.apache.hadoop.mapreduce.RecordReader;
@@ -126,9 +126,9 @@ public class CarbondataInputFormat extends RichInputFormat{
     }
 
     @Override
-    protected Row nextRecordInternal(Row row) throws IOException {
+    protected FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
         try {
-            row = new Row(columnIndex.size());
+            row = new FlinkxRow(columnIndex.size());
 
             Object[] record = (Object[]) recordReader.getCurrentValue();
             for(int i = 0; i < columnIndex.size(); ++i) {

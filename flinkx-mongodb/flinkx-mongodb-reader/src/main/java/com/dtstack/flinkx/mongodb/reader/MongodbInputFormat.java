@@ -31,7 +31,7 @@ import com.mongodb.client.MongoDatabase;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.io.InputSplit;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -97,16 +97,16 @@ public class MongodbInputFormat extends RichInputFormat {
     }
 
     @Override
-    public Row nextRecordInternal(Row row) throws IOException {
+    public FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
         Document doc = cursor.next();
         if(metaColumns.size() == 1 && "*".equals(metaColumns.get(0).getName())){
-            row = new Row(doc.size());
+            row = new FlinkxRow(doc.size());
             String[] names = doc.keySet().toArray(new String[0]);
             for (int i = 0; i < names.length; i++) {
                 row.setField(i,doc.get(names[i]));
             }
         } else {
-            row = new Row(metaColumns.size());
+            row = new FlinkxRow(metaColumns.size());
             for (int i = 0; i < metaColumns.size(); i++) {
                 MetaColumn metaColumn = metaColumns.get(i);
 

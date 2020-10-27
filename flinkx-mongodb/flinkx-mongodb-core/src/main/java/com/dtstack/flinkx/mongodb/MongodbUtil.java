@@ -27,7 +27,7 @@ import com.mongodb.*;
 import com.mongodb.client.MongoCursor;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,7 +118,7 @@ public class MongodbUtil {
         }
     }
 
-    public static Document convertRowToDoc(Row row,List<MetaColumn> columns) throws WriteRecordException {
+    public static Document convertRowToDoc(FlinkxRow row,List<MetaColumn> columns) throws WriteRecordException {
         Document doc = new Document();
         for (int i = 0; i < columns.size(); i++) {
             MetaColumn column = columns.get(i);

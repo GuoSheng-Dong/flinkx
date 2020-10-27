@@ -28,7 +28,7 @@ import com.dtstack.flinkx.util.StringUtil;
 import com.dtstack.flinkx.util.SysUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
@@ -172,7 +172,7 @@ public class FtpOutputFormat extends FileOutputFormat {
     }
 
     @Override
-    public void writeSingleRecordToFile(Row row) throws WriteRecordException {
+    public void writeSingleRecordToFile(FlinkxRow row) throws WriteRecordException {
         if(os == null){
             nextBlock();
         }

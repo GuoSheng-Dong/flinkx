@@ -20,7 +20,7 @@ package org.apache.flink.streaming.runtime.partitioner;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.runtime.plugable.SerializationDelegate;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 /**
  * Rewrite the [DTRebalancePartitioner] to distribute data based on the channel specified in the data
@@ -33,7 +33,7 @@ public class DTRebalancePartitioner<T> extends StreamPartitioner<T> {
 
     @Override
     public int selectChannel(SerializationDelegate<StreamRecord<T>> streamRecordSerializationDelegate) {
-        Row row = (Row) streamRecordSerializationDelegate.getInstance().getValue();
+        FlinkxRow row = (FlinkxRow) streamRecordSerializationDelegate.getInstance().getValue();
         return (Integer)row.getField(row.getArity() - 1);
     }
 

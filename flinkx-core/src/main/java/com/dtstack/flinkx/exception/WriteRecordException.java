@@ -18,7 +18,7 @@
 
 package com.dtstack.flinkx.exception;
 
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 /**
  * The Exception describing errors when writing a record
@@ -29,17 +29,17 @@ import org.apache.flink.types.Row;
 public class WriteRecordException extends Exception {
 
     private int colIndex = -1;
-    private Row row;
+    private FlinkxRow row;
 
     public int getColIndex() {
         return colIndex;
     }
 
-    public Row getRow() {
+    public FlinkxRow getRow() {
         return row;
     }
 
-    public WriteRecordException(String message, Throwable cause, int colIndex, Row row) {
+    public WriteRecordException(String message, Throwable cause, int colIndex, FlinkxRow row) {
         super(message, cause);
         this.colIndex = colIndex;
         this.row = row;

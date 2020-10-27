@@ -28,7 +28,7 @@ import com.dtstack.flinkx.writer.DataWriter;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
 import org.apache.flink.streaming.api.functions.sink.DtOutputFormatSinkFunction;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.kudu.client.AsyncKuduClient;
 
 import java.util.List;
@@ -72,7 +72,7 @@ public class KuduWriter extends DataWriter {
     }
 
     @Override
-    public DataStreamSink<?> writeData(DataStream<Row> dataSet) {
+    public DataStreamSink<?> writeData(DataStream<FlinkxRow> dataSet) {
         KuduOutputFormatBuilder builder = new KuduOutputFormatBuilder();
         builder.setMonitorUrls(monitorUrls);
         builder.setColumns(columns);

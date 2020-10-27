@@ -25,7 +25,7 @@ import com.dtstack.flinkx.util.TelnetUtil;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.flink.util.Preconditions;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
@@ -70,9 +70,9 @@ public class EsUtil {
         return client;
     }
 
-    public static Row jsonMapToRow(Map<String,Object> map, List<String> fields, List<String> types, List<String> values) {
+    public static FlinkxRow jsonMapToRow(Map<String,Object> map, List<String> fields, List<String> types, List<String> values) {
         Preconditions.checkArgument(types.size() == fields.size());
-        Row row = new Row(fields.size());
+        FlinkxRow row = new FlinkxRow(fields.size());
 
         for (int i = 0; i < fields.size(); ++i) {
             String field = fields.get(i);
@@ -90,7 +90,7 @@ public class EsUtil {
         return row;
     }
 
-    public static Map<String, Object> rowToJsonMap(Row row, List<String> fields, List<String> types) throws WriteRecordException {
+    public static Map<String, Object> rowToJsonMap(FlinkxRow row, List<String> fields, List<String> types) throws WriteRecordException {
         Preconditions.checkArgument(row.getArity() == fields.size());
         Map<String,Object> jsonMap = new HashMap<>();
         int i = 0;
@@ -115,7 +115,7 @@ public class EsUtil {
                 currMap.put(key, col);
             }
         } catch(Exception ex) {
-            String msg = "EsUtil.rowToJsonMap Writing record error: when converting field[" + i + "] in Row(" + row + ")";
+            String msg = "EsUtil.rowToJsonMap Writing record error: when converting field[" + i + "] in FlinkxRow(" + row + ")";
             throw new WriteRecordException(msg, ex, i, row);
         }
 

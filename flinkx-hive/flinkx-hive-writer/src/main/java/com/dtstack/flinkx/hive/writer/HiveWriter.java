@@ -29,7 +29,7 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import parquet.hadoop.ParquetWriter;
 
 import java.util.HashMap;
@@ -163,7 +163,7 @@ public class HiveWriter extends DataWriter {
     }
 
     @Override
-    public DataStreamSink<?> writeData(DataStream<Row> dataSet) {
+    public DataStreamSink<?> writeData(DataStream<FlinkxRow> dataSet) {
         HiveOutputFormatBuilder builder = new HiveOutputFormatBuilder();
         builder.setHadoopConfig(hadoopConfig);
         builder.setDefaultFS(defaultFS);

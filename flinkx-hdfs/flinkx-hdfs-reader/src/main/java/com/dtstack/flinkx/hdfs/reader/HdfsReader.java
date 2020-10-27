@@ -27,7 +27,7 @@ import com.dtstack.flinkx.reader.MetaColumn;
 import com.dtstack.flinkx.util.StringUtil;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +66,7 @@ public class HdfsReader extends DataReader {
     }
 
     @Override
-    public DataStream<Row> readData() {
+    public DataStream<FlinkxRow> readData() {
         HdfsInputFormatBuilder builder = new HdfsInputFormatBuilder(fileType);
         builder.setInputPaths(path);
         builder.setMetaColumn(metaColumns);

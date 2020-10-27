@@ -30,7 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.io.GenericInputSplit;
 import org.apache.flink.core.io.InputSplit;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -150,14 +150,14 @@ public class BinlogInputFormat extends RichInputFormat {
     }
 
     @Override
-    protected Row nextRecordInternal(Row row) throws IOException {
+    protected FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
         if (binlogEventSink != null) {
             return binlogEventSink.takeEvent();
         }
         LOG.warn("binlog park start");
         LockSupport.park(this);
         LOG.warn("binlog park end...");
-        return Row.of();
+        return FlinkxRow.of();
     }
 
     @Override

@@ -20,14 +20,14 @@ package com.dtstack.flinkx.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.flink.util.Preconditions;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Row Utilities
+ * FlinkxRow Utilities
  *
  * Company: www.dtstack.com
  * @author huyifan.zju@163.com
@@ -35,7 +35,7 @@ import java.util.Map;
 public class RowUtil {
     static Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-    public static String rowToJson(Row row, String[] colName) {
+    public static String rowToJson(FlinkxRow row, String[] colName) {
         Preconditions.checkNotNull(colName);
         Map<String,Object> map = new HashMap<>();
 

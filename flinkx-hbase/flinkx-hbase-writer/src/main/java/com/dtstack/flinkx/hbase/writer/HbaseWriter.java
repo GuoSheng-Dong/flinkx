@@ -26,7 +26,7 @@ import com.dtstack.flinkx.writer.DataWriter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -122,7 +122,7 @@ public class HbaseWriter extends DataWriter {
     }
 
     @Override
-    public DataStreamSink<?> writeData(DataStream<Row> dataSet) {
+    public DataStreamSink<?> writeData(DataStream<FlinkxRow> dataSet) {
         HbaseOutputFormatBuilder builder = new HbaseOutputFormatBuilder();
         builder.setHbaseConfig(hbaseConfig);
         builder.setTableName(tableName);

@@ -27,7 +27,7 @@ import com.dtstack.flinkx.rdb.outputformat.JdbcOutputFormatBuilder;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
 import org.apache.flink.streaming.api.functions.sink.OutputFormatSinkFunction;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 /**
  * The writer plugin for PostgreSQL database
@@ -44,7 +44,7 @@ public class PostgresqlWriter extends JdbcDataWriter {
     }
 
     @Override
-    public DataStreamSink<?> writeData(DataStream<Row> dataSet) {
+    public DataStreamSink<?> writeData(DataStream<FlinkxRow> dataSet) {
         PostgresqlOutputFormat postgresqlOutputFormat = new PostgresqlOutputFormat();
         JdbcOutputFormatBuilder builder = new JdbcOutputFormatBuilder(postgresqlOutputFormat);
         builder.setDriverName(databaseInterface.getDriverClass());

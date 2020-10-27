@@ -25,7 +25,7 @@ import com.dtstack.flinkx.util.StringUtil;
 import com.dtstack.flinkx.writer.DataWriter;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +96,7 @@ public class FtpWriter extends DataWriter{
     }
 
     @Override
-    public DataStreamSink<?> writeData(DataStream<Row> dataSet) {
+    public DataStreamSink<?> writeData(DataStream<FlinkxRow> dataSet) {
         FtpOutputFormatBuilder builder = new FtpOutputFormatBuilder();
         builder.setProtocol(protocol);
         builder.setMonitorUrls(monitorUrls);

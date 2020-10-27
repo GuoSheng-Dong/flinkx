@@ -31,7 +31,7 @@ import com.dtstack.flinkx.odps.OdpsUtil;
 import com.dtstack.flinkx.outputformat.RichOutputFormat;
 import com.dtstack.flinkx.util.DateUtil;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Map;
@@ -103,7 +103,7 @@ public class OdpsOutputFormat extends RichOutputFormat {
     }
 
     @Override
-    public void writeSingleRecordInternal(Row row) throws WriteRecordException{
+    public void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException{
         Record record = row2record(row, columnTypes);
         try {
             recordWriter.write(record);
@@ -117,7 +117,7 @@ public class OdpsOutputFormat extends RichOutputFormat {
         throw new UnsupportedOperationException();
     }
 
-    private Record row2record(Row row, String[] columnTypes) throws WriteRecordException {
+    private Record row2record(FlinkxRow row, String[] columnTypes) throws WriteRecordException {
         Record record = session.newRecord();
         int i = 0;
         try {
@@ -176,7 +176,7 @@ public class OdpsOutputFormat extends RichOutputFormat {
             }
 
         } catch(Exception ex) {
-            String msg = getClass().getName() + " Writing record error: when converting field[" + i + "] in Row(" + row + ")";
+            String msg = getClass().getName() + " Writing record error: when converting field[" + i + "] in FlinkxRow(" + row + ")";
             throw new WriteRecordException(msg, ex, i, row);
         }
 

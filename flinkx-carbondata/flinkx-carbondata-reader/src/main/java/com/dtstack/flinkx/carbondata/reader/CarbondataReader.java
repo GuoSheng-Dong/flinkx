@@ -23,7 +23,7 @@ import com.dtstack.flinkx.config.ReaderConfig;
 import com.dtstack.flinkx.reader.DataReader;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +87,7 @@ public class CarbondataReader extends DataReader {
     }
 
     @Override
-    public DataStream<Row> readData() {
+    public DataStream<FlinkxRow> readData() {
         CarbondataInputFormatBuilder builder = new CarbondataInputFormatBuilder();
         builder.setColumnNames(columnName);
         builder.setColumnTypes(columnType);

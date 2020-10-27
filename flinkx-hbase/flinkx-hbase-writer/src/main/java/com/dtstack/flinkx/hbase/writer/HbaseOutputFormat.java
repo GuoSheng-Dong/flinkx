@@ -28,7 +28,7 @@ import com.dtstack.flinkx.util.DateUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.Validate;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
@@ -137,7 +137,7 @@ public class HbaseOutputFormat extends RichOutputFormat {
     }
 
     @Override
-    public void writeSingleRecordInternal(Row record) throws WriteRecordException {
+    public void writeSingleRecordInternal(FlinkxRow record) throws WriteRecordException {
         int i = 0;
         try {
             byte[] rowkey = getRowkey(record);
@@ -214,8 +214,8 @@ public class HbaseOutputFormat extends RichOutputFormat {
     }
 
     @Override
-    protected String recordConvertDetailErrorMessage(int pos, Row row) {
-        return "\nHbaseOutputFormat [" + jobName + "] writeRecord error: when converting field[" + columnNames.get(pos) + "] in Row(" + row + ")";
+    protected String recordConvertDetailErrorMessage(int pos, FlinkxRow row) {
+        return "\nHbaseOutputFormat [" + jobName + "] writeRecord error: when converting field[" + columnNames.get(pos) + "] in FlinkxRow(" + row + ")";
     }
 
     @Override
@@ -223,7 +223,7 @@ public class HbaseOutputFormat extends RichOutputFormat {
         throw new IllegalArgumentException();
     }
 
-    private byte[] getRowkey(Row record) {
+    private byte[] getRowkey(FlinkxRow record) {
         Map<String, Object> nameValueMap = new HashMap<>();
         for (Integer keyColumnIndex : rowKeyColumnIndex) {
             nameValueMap.put(columnNames.get(keyColumnIndex), record.getField(keyColumnIndex));
@@ -233,7 +233,7 @@ public class HbaseOutputFormat extends RichOutputFormat {
         return rowKeyStr.getBytes();
     }
 
-    public long getVersion(Row record){
+    public long getVersion(FlinkxRow record){
         Integer index = versionColumnIndex.intValue();
         long timestamp;
         if(index == null){

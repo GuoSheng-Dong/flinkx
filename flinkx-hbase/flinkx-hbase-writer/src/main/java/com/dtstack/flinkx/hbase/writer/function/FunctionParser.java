@@ -54,11 +54,11 @@ public class FunctionParser {
 
     public static FunctionTree parse(String express){
         if(StringUtils.isEmpty(express)){
-            throw new RuntimeException("Row key column express can not be null");
+            throw new RuntimeException("FlinkxRow key column express can not be null");
         }
 
         if(StringUtils.isEmpty(express.trim())){
-            throw new RuntimeException("Row key column express can not be empty");
+            throw new RuntimeException("FlinkxRow key column express can not be empty");
         }
 
         express = replaceColToStringFunc(express);

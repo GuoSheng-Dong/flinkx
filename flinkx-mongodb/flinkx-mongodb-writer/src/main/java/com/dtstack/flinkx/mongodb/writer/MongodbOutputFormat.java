@@ -28,7 +28,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.bson.Document;
 
 import java.io.IOException;
@@ -79,7 +79,7 @@ public class MongodbOutputFormat extends RichOutputFormat {
     }
 
     @Override
-    protected void writeSingleRecordInternal(Row row) throws WriteRecordException {
+    protected void writeSingleRecordInternal(FlinkxRow row) throws WriteRecordException {
         try {
             Document doc = MongodbUtil.convertRowToDoc(row,columns);
 
@@ -97,7 +97,7 @@ public class MongodbOutputFormat extends RichOutputFormat {
     @Override
     protected void writeMultipleRecordsInternal() throws Exception {
         List<Document> documents = new ArrayList<>(rows.size());
-        for (Row row : rows) {
+        for (FlinkxRow row : rows) {
             documents.add(MongodbUtil.convertRowToDoc(row,columns));
         }
 

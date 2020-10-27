@@ -23,7 +23,7 @@ import com.dtstack.flinkx.reader.MetaColumn;
 import jodd.util.StringUtil;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.flink.core.io.InputSplit;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -81,17 +81,17 @@ public class HdfsTextInputFormat extends HdfsInputFormat {
     }
 
     @Override
-    public Row nextRecordInternal(Row row) throws IOException {
+    public FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
         String line = new String(((Text)value).getBytes(), 0, ((Text)value).getLength(), charsetName);
         String[] fields = line.split(delimiter);
 
         if (metaColumns.size() == 1 && "*".equals(metaColumns.get(0).getName())){
-            row = new Row(fields.length);
+            row = new FlinkxRow(fields.length);
             for (int i = 0; i < fields.length; i++) {
                 row.setField(i, fields[i]);
             }
         } else {
-            row = new Row(metaColumns.size());
+            row = new FlinkxRow(metaColumns.size());
             for (int i = 0; i < metaColumns.size(); i++) {
                 MetaColumn metaColumn = metaColumns.get(i);
 

@@ -23,7 +23,7 @@ import com.dtstack.flinkx.reader.MetaColumn;
 import com.dtstack.flinkx.util.ClassUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.core.io.InputSplit;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -95,11 +95,11 @@ public class GbaseInputFormat extends JdbcInputFormat {
     }
 
     @Override
-    public Row nextRecordInternal(Row row) throws IOException {
+    public FlinkxRow nextRecordInternal(FlinkxRow row) throws IOException {
         if (!hasNext) {
             return null;
         }
-        row = new Row(columnCount);
+        row = new FlinkxRow(columnCount);
         try {
             for (int pos = 0; pos < row.getArity(); pos++) {
                 Object obj = resultSet.getObject(pos + 1);

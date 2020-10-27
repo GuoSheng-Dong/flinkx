@@ -25,7 +25,7 @@ import com.dtstack.flinkx.reader.MetaColumn;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +59,7 @@ public class StreamReader extends DataReader {
     }
 
     @Override
-    public DataStream<Row> readData() {
+    public DataStream<FlinkxRow> readData() {
         StreamInputFormatBuilder builder = new StreamInputFormatBuilder();
         builder.setColumns(columns);
         builder.setSliceRecordCount(sliceRecordCount);

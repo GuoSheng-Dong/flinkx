@@ -24,7 +24,7 @@ import com.dtstack.flinkx.hdfs.ECompressType;
 import com.dtstack.flinkx.util.ColumnTypeUtil;
 import com.dtstack.flinkx.util.DateUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.common.type.HiveDecimal;
 import org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe;
@@ -151,7 +151,7 @@ public class HdfsParquetOutputFormat extends HdfsOutputFormat {
     }
 
     @Override
-    public void writeSingleRecordToFile(Row row) throws WriteRecordException {
+    public void writeSingleRecordToFile(FlinkxRow row) throws WriteRecordException {
 
         if(writer == null){
             nextBlock();
@@ -273,8 +273,8 @@ public class HdfsParquetOutputFormat extends HdfsOutputFormat {
     }
 
     @Override
-    protected String recordConvertDetailErrorMessage(int pos, Row row) {
-        return "\nHdfsParquetOutputFormat [" + jobName + "] writeRecord error: when converting field[" + fullColumnNames.get(pos) + "] in Row(" + row + ")";
+    protected String recordConvertDetailErrorMessage(int pos, FlinkxRow row) {
+        return "\nHdfsParquetOutputFormat [" + jobName + "] writeRecord error: when converting field[" + fullColumnNames.get(pos) + "] in FlinkxRow(" + row + ")";
     }
 
     @Override

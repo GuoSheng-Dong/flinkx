@@ -22,7 +22,7 @@ import com.dtstack.flinkx.config.DataTransferConfig;
 import com.dtstack.flinkx.writer.DataWriter;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.types.Row;
+import com.dtstack.flinkx.common.FlinkxRow;
 
 /**
  * This write plugin is used to test the performance of the read plugin, and the plugin directly discards the read data.
@@ -40,7 +40,7 @@ public class StreamWriter extends DataWriter {
     }
 
     @Override
-    public DataStreamSink<?> writeData(DataStream<Row> dataSet) {
+    public DataStreamSink<?> writeData(DataStream<FlinkxRow> dataSet) {
         StreamOutputFormatBuilder builder = new StreamOutputFormatBuilder();
         builder.setPrint(print);
         builder.setRestoreConfig(restoreConfig);
